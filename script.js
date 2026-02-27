@@ -1,12 +1,15 @@
-let selectedLang = 'vi'
+let selectedRoute = 'vi'; // vi = hiểu, en = không hiểu
 
 const startBtn = document.getElementById('start-btn');
 const langBtn = document.getElementById('lang-btn');
 const f11Hint = document.getElementById('f11-hint');
 
-// cập nhật text ban đầu
-function updateStartScreen() {
-  if (selectedLang === 'vi') {
+// đổi route (chỉ ở start screen)
+langBtn.addEventListener('click', () => {
+  selectedRoute = selectedRoute === 'vi' ? 'en' : 'vi';
+
+  // đổi text UI (KHÔNG phải dịch story)
+  if (selectedRoute === 'vi') {
     startBtn.textContent = 'BẮT ĐẦU';
     langBtn.textContent = 'VI';
     f11Hint.textContent = 'Nhấn F11 để có trải nghiệm tốt hơn';
@@ -15,36 +18,26 @@ function updateStartScreen() {
     langBtn.textContent = 'EN';
     f11Hint.textContent = 'Press F11 for better experience';
   }
-}
-
-// đổi ngôn ngữ (CHỈ Ở MÀN START)
-langBtn.addEventListener('click', () => {
-  selectedLang = selectedLang === 'vi' ? 'en' : 'vi';
-  updateStartScreen();
 });
 
-// bấm bắt đầu → KHÓA NHÁNH
+// bấm start → khóa route + animation
 startBtn.addEventListener('click', () => {
-  localStorage.setItem('storyLang', selectedLang);
+
+  // khóa route để dùng cho story sau
+  localStorage.setItem('storyRoute', selectedRoute);
 
   // animation bay lên
   startBtn.classList.add('fly-up');
-  setTimeout(() => langBtn.classList.add('fly-up'), 400);
+
+  setTimeout(() => {
+    langBtn.classList.add('fly-up');
+    f11Hint.classList.add('hide');
+  }, 400);
+
   setTimeout(() => {
     document.getElementById('start-screen').style.display = 'none';
-    startStory();
+
+    // 👉 từ đây load story theo route
+    // loadScene('intro');
   }, 1200);
 });
-
-// khởi động câu chuyện
-async function startStory() {
-  const lang = localStorage.getItem('storyLang');
-  const res = await fetch(`story/${lang}/intro.json`);
-  const scene = await res.json();
-
-  console.log('SCENE LOADED:', scene);
-  // ở đây bạn render nội dung game
-}
-
-// init
-updateStartScreen();
