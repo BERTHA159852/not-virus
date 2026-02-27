@@ -1,8 +1,12 @@
-function isMobileDevice() {
-  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+function isUnsupportedDevice() {
+  const smallScreen = window.innerWidth < 1000;
+  const noHover = !window.matchMedia('(hover: hover)').matches;
+  const noKeyboard = !('keyboard' in navigator);
+
+  return smallScreen || noHover || noKeyboard;
 }
 
-if (isMobileDevice()) {
+if (isUnsupportedDevice()) {
   document.getElementById('mobile-block').style.display = 'flex';
   document.getElementById('start-screen').style.display = 'none';
 }
