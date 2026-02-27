@@ -1,21 +1,40 @@
-function isRealDesktop() {
-  const canHover = window.matchMedia('(hover: hover)').matches;
-  const finePointer = window.matchMedia('(pointer: fine)').matches;
-  return canHover && finePointer;
+function isLikelyMobile() {
+  const ua = navigator.userAgent.toLowerCase();
+
+  // thiết bị mobile rõ ràng
+  if (/android|iphone|ipod/i.test(ua)) return true;
+
+  // iPadOS giả desktop
+  if (/ipad/i.test(ua)) return true;
+
+  return false;
 }
 
+function hasFinePointer() {
+  return window.matchMedia('(pointer: fine)').matches;
+}
+
+function hasHover() {
+  return window.matchMedia('(hover: hover)').matches;
+}
+
+function isRealPC() {
+  return hasFinePointer() && hasHover();
+}
 const mobileBlock = document.getElementById('mobile-block');
 const mobileText = document.getElementById('mobile-text');
 const startScreen = document.getElementById('start-screen');
 
-if (!isRealDesktop()) {
-  // Không phải PC thật
-  const uaIsMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+if (!isRealPC() && isLikelyMobile()) {
+  // mobile thường
+  mobileText.textContent = 'Vui lòng trải nghiệm trên PC / Laptop';
+  mobileBlock.style.display = 'flex';
+  startScreen.style.display = 'none';
 
-  mobileText.textContent = uaIsMobile
-    ? 'Vui lòng trải nghiệm trên PC / Laptop'
-    : 'Đã bảo là trải nghiệm trên PC / Laptop thật rồi, đừng cố 😑';
-
+} else if (!isRealPC() && !isLikelyMobile()) {
+  // mobile bật desktop mode
+  mobileText.textContent =
+    'Đã bảo là trải nghiệm trên PC/Laptop thật rồi, đừng cố 😑';
   mobileBlock.style.display = 'flex';
   startScreen.style.display = 'none';
 }
