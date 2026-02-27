@@ -1,11 +1,39 @@
-function canFullscreen() {
-  return document.documentElement.requestFullscreen;
+function isTouchDevice() {
+  return (
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0
+  );
 }
 
-if (!canFullscreen()) {
-  block();
+function isMobileUA() {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
+function isFakeDesktopMode() {
+  // Mobile + bật chế độ desktop thường có:
+  // - touch
+  // - viewport rộng bất thường
+  return isTouchDevice() && window.innerWidth > 900;
+}
+
+const mobileBlock = document.getElementById('mobile-block');
+const mobileText = document.getElementById('mobile-text');
+const startScreen = document.getElementById('start-screen');
+
+// THỨ TỰ ƯU TIÊN RÕ RÀNG
+if (isMobileUA() && !isFakeDesktopMode()) {
+  // Mobile bình thường
+  mobileText.textContent = 'Vui lòng trải nghiệm trên PC / Laptop';
+  mobileBlock.style.display = 'flex';
+  startScreen.style.display = 'none';
+
+} else if (isFakeDesktopMode()) {
+  // Mobile bật chế độ desktop
+  mobileText.textContent =
+    'Đã bảo là trải nghiệm trên PC / Laptop thật rồi, đừng cố 😑';
+  mobileBlock.style.display = 'flex';
+  startScreen.style.display = 'none';
+}
 
 
 
