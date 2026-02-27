@@ -1,36 +1,21 @@
-function isTouchDevice() {
-  return (
-    'ontouchstart' in window ||
-    navigator.maxTouchPoints > 0
-  );
-}
-
-function isMobileUA() {
-  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
-
-function isFakeDesktopMode() {
-  // Mobile + bật chế độ desktop thường có:
-  // - touch
-  // - viewport rộng bất thường
-  return isTouchDevice() && window.innerWidth > 900;
+function isRealDesktop() {
+  const canHover = window.matchMedia('(hover: hover)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+  return canHover && finePointer;
 }
 
 const mobileBlock = document.getElementById('mobile-block');
 const mobileText = document.getElementById('mobile-text');
 const startScreen = document.getElementById('start-screen');
 
-// THỨ TỰ ƯU TIÊN RÕ RÀNG
-if (isMobileUA() && !isFakeDesktopMode()) {
-  // Mobile bình thường
-  mobileText.textContent = 'Vui lòng trải nghiệm trên PC / Laptop';
-  mobileBlock.style.display = 'flex';
-  startScreen.style.display = 'none';
+if (!isRealDesktop()) {
+  // Không phải PC thật
+  const uaIsMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-} else if (isFakeDesktopMode()) {
-  // Mobile bật chế độ desktop
-  mobileText.textContent =
-    'Đã bảo là trải nghiệm trên PC / Laptop thật rồi, đừng cố 😑';
+  mobileText.textContent = uaIsMobile
+    ? 'Vui lòng trải nghiệm trên PC / Laptop'
+    : 'Đã bảo là trải nghiệm trên PC / Laptop thật rồi, đừng cố 😑';
+
   mobileBlock.style.display = 'flex';
   startScreen.style.display = 'none';
 }
