@@ -1,16 +1,3 @@
-const mobileText = document.getElementById('mobile-text');
-
-if (isMobileDevice()) {
-  mobileText.textContent =
-    selectedLang === 'vi'
-      ? 'Vui lòng trải nghiệm trên PC / Laptop'
-      : 'Please experience this on PC / Laptop';
-
-  document.getElementById('mobile-block').style.display = 'flex';
-  document.getElementById('start-screen').style.display = 'none';
-}
-
-
 
 let selectedLang = 'vi';
 
