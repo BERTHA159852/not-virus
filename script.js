@@ -1,5 +1,4 @@
-
-let selectedLang = 'vi';
+let selectedLang = 'vi'
 
 const startBtn = document.getElementById('start-btn');
 const langBtn = document.getElementById('lang-btn');
