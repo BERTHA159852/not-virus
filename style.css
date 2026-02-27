@@ -31,3 +31,10 @@ body {
   transform: translateY(-200px);
   opacity: 0;
 }
+#f11-hint {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-size: 12px;
+  color: #555;
+}
