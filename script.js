@@ -1,27 +1,50 @@
-let language = 'VI';
+let selectedLang = 'vi';
 
 const startBtn = document.getElementById('start-btn');
 const langBtn = document.getElementById('lang-btn');
+const f11Hint = document.getElementById('f11-hint');
 
-// Đổi ngôn ngữ
+// cập nhật text ban đầu
+function updateStartScreen() {
+  if (selectedLang === 'vi') {
+    startBtn.textContent = 'BẮT ĐẦU';
+    langBtn.textContent = 'VI';
+    f11Hint.textContent = 'Nhấn F11 để có trải nghiệm tốt hơn';
+  } else {
+    startBtn.textContent = 'START';
+    langBtn.textContent = 'EN';
+    f11Hint.textContent = 'Press F11 for better experience';
+  }
+}
+
+// đổi ngôn ngữ (CHỈ Ở MÀN START)
 langBtn.addEventListener('click', () => {
-  language = language === 'VI' ? 'EN' : 'VI';
-  langBtn.textContent = language;
-
-  startBtn.textContent = language === 'VI' ? 'BẮT ĐẦU' : 'START';
+  selectedLang = selectedLang === 'vi' ? 'en' : 'vi';
+  updateStartScreen();
 });
 
-// Bấm bắt đầu → animation
+// bấm bắt đầu → KHÓA NHÁNH
 startBtn.addEventListener('click', () => {
+  localStorage.setItem('storyLang', selectedLang);
+
+  // animation bay lên
   startBtn.classList.add('fly-up');
-
-  setTimeout(() => {
-    langBtn.classList.add('fly-up');
-  }, 400);
-
+  setTimeout(() => langBtn.classList.add('fly-up'), 400);
   setTimeout(() => {
     document.getElementById('start-screen').style.display = 'none';
-    // 👉 Tại đây bạn chuyển sang màn hình game
-    // showScreen('screen-1');
+    startStory();
   }, 1200);
 });
+
+// khởi động câu chuyện
+async function startStory() {
+  const lang = localStorage.getItem('storyLang');
+  const res = await fetch(`story/${lang}/intro.json`);
+  const scene = await res.json();
+
+  console.log('SCENE LOADED:', scene);
+  // ở đây bạn render nội dung game
+}
+
+// init
+updateStartScreen();
