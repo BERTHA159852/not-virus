@@ -1,3 +1,15 @@
+function isMobileDevice() {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
+if (isMobileDevice()) {
+  document.getElementById('mobile-block').style.display = 'flex';
+  document.getElementById('start-screen').style.display = 'none';
+}
+
+
+
+
 let selectedLang = 'vi';
 
 const startBtn = document.getElementById('start-btn');
