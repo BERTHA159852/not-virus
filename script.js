@@ -1,14 +1,9 @@
-function isUnsupportedDevice() {
-  const smallScreen = window.innerWidth < 1000;
-  const noHover = !window.matchMedia('(hover: hover)').matches;
-  const noKeyboard = !('keyboard' in navigator);
-
-  return smallScreen || noHover || noKeyboard;
+function canFullscreen() {
+  return document.documentElement.requestFullscreen;
 }
 
-if (isUnsupportedDevice()) {
-  document.getElementById('mobile-block').style.display = 'flex';
-  document.getElementById('start-screen').style.display = 'none';
+if (!canFullscreen()) {
+  block();
 }
 
 
