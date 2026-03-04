@@ -4,9 +4,6 @@ body {
   font-family: sans-serif;
   background: white;
 }
-canvas {
-  display: block;
-}
 
 #start-screen {
   height: 100vh;
