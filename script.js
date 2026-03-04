@@ -4,11 +4,9 @@ const startBtn = document.getElementById('start-btn');
 const langBtn = document.getElementById('lang-btn');
 const f11Hint = document.getElementById('f11-hint');
 
-// đổi route (chỉ ở start screen)
 langBtn.addEventListener('click', () => {
   selectedRoute = selectedRoute === 'vi' ? 'en' : 'vi';
 
-  // đổi text UI (KHÔNG phải dịch story)
   if (selectedRoute === 'vi') {
     startBtn.textContent = 'BẮT ĐẦU';
     langBtn.textContent = 'VI';
