@@ -5,6 +5,7 @@ const langBtn = document.getElementById('lang-btn');
 const f11Hint = document.getElementById('f11-hint');
 
 langBtn.addEventListener('click', () => {
+  if (isStarting) return;
   selectedRoute = selectedRoute === 'vi' ? 'en' : 'vi';
 
   if (selectedRoute === 'vi') {
