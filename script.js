@@ -1,4 +1,5 @@
-let selectedRoute = 'vi'; // vi = hiểu, en = không hiểu
+let selectedRoute = 'vi';
+let isStarting = false;
 
 const startBtn = document.getElementById('start-btn');
 const langBtn = document.getElementById('lang-btn');
@@ -18,8 +19,6 @@ langBtn.addEventListener('click', () => {
     f11Hint.textContent = 'Press F11 for better experience';
   }
 });
-
-let isStarting = false;
 
 startBtn.addEventListener('click', () => {
   if (isStarting) return;
