@@ -27,6 +27,11 @@ body {
   color: white;
 }
 
+.panel {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 /* Animation bay lên */
 .fly-up {
   transform: translateY(-200px);
