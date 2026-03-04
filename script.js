@@ -20,7 +20,12 @@ langBtn.addEventListener('click', () => {
   }
 });
 
+let isStarting = false;
+
 startBtn.addEventListener('click', () => {
+  if (isStarting) return;
+  isStarting = true;
+  
   localStorage.setItem('storyRoute', selectedRoute);
   startBtn.classList.add('fly-up');
 
