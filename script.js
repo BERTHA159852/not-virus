@@ -20,13 +20,8 @@ langBtn.addEventListener('click', () => {
   }
 });
 
-// bấm start → khóa route + animation
 startBtn.addEventListener('click', () => {
-
-  // khóa route để dùng cho story sau
   localStorage.setItem('storyRoute', selectedRoute);
-
-  // animation bay lên
   startBtn.classList.add('fly-up');
 
   setTimeout(() => {
@@ -36,8 +31,5 @@ startBtn.addEventListener('click', () => {
 
   setTimeout(() => {
     document.getElementById('start-screen').style.display = 'none';
-
-    // 👉 từ đây load story theo route
-    // loadScene('intro');
   }, 1200);
 });
