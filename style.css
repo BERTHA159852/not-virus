@@ -27,9 +27,11 @@ body {
   color: white;
 }
 
-.panel {
+#start-screen {
   user-select: none;
-  -webkit-user-select: none;
+  -webkit-user-select: none; /* Chrome, Safari */
+  -moz-user-select: none;    /* Firefox */
+  -ms-user-select: none;     /* IE */
 }
 
 /* Animation bay lên */
