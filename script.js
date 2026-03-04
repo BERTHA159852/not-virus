@@ -41,9 +41,3 @@ startBtn.addEventListener('click', () => {
     // loadScene('intro');
   }, 1200);
 });
-
-
-  requestAnimationFrame(animate);
-}
-
-animate();
