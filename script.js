@@ -41,3 +41,5 @@ const canvas=document.getElementById("intro-canvas")
 canvas.style.display="block"
 
 startIntro();
+
+})
