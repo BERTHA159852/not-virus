@@ -41,4 +41,4 @@ if(progress<1){
 
 requestAnimationFrame(draw)
 
-}
+};
