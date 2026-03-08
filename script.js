@@ -37,6 +37,6 @@ startBtn.addEventListener('click', () => {
   }, 1200);
 });
 const canvas=document.getElementById("intro-canvas");
-canvas.style.display="block"
+canvas.style.display="block";
 
-startIntro()
+startIntro();
