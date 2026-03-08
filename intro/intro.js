@@ -41,15 +41,4 @@ if(progress<1){
 
 requestAnimationFrame(draw)
 
-}else{
-
-// intro xong → load story
-loadStory()
-
-}
-
-}
-
-draw()
-
 }
