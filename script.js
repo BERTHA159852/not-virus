@@ -35,11 +35,10 @@ startBtn.addEventListener('click', () => {
   setTimeout(() => {
     document.getElementById('start-screen').style.display = 'none';
   }, 1200);
+
+const canvas=document.getElementById("intro-canvas");
+canvas.style.display="block";
+
+startIntro();
+
 });
-
-const canvas=document.getElementById("intro-canvas")
-canvas.style.display="block"
-
-startIntro()
-
-})
