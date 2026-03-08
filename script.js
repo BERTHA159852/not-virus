@@ -41,6 +41,6 @@ startBtn.addEventListener('click', () => {
 
     startIntro(); // bắt đầu vẽ
 
-  }, 1200);
+  }, 5200);
 
 });
