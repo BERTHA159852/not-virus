@@ -36,8 +36,3 @@ startBtn.addEventListener('click', () => {
     document.getElementById('start-screen').style.display = 'none';
   }, 1200);
 });
-
-const canvas=document.getElementById("intro-canvas")
-canvas.style.display="block"
-
-startIntro()
