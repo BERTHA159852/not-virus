@@ -34,11 +34,9 @@ startBtn.addEventListener('click', () => {
 
   setTimeout(() => {
     document.getElementById('start-screen').style.display = 'none';
-  }, 1200);
-
 const canvas=document.getElementById("intro-canvas");
 canvas.style.display="block";
-
+  }, 2200);
 startIntro();
 
 });
