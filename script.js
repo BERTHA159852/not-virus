@@ -33,10 +33,14 @@ startBtn.addEventListener('click', () => {
   }, 400);
 
   setTimeout(() => {
+
     document.getElementById('start-screen').style.display = 'none';
-const canvas=document.getElementById("intro-canvas");
-canvas.style.display="block";
-  }, 2200);
-startIntro();
+
+    const canvas = document.getElementById("intro-canvas");
+    canvas.style.display = "block";
+
+    startIntro(); // bắt đầu vẽ
+
+  }, 1200);
 
 });
