@@ -14,7 +14,10 @@ let groupIndex = 0
 let doorIndex = 0
 let doorProgress = 0
 
-
+// t chạy từ 0 đến 1, hàm trả về giá trị đã được "uốn cong"
+function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
 
 // chia line thành từng nhóm
 const lineGroups = [
@@ -137,10 +140,10 @@ function draw() {
 }
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
 function drawDoor() {
-    // 1. Vẽ lại các nét ĐÃ HOÀN THÀNH trước đó
+    // 1. Vẽ lại các nét ĐÃ HOÀN THÀNH
     for (let i = 0; i < doorIndex; i++) {
         const s = doorPath[i];
-        if (s[4]) { // Chỉ vẽ nếu đoạn đó yêu cầu penDown (true)
+        if (s[4]) { 
             ctx.beginPath();
             ctx.moveTo(s[0], s[1]);
             ctx.lineTo(s[2], s[3]);
@@ -148,41 +151,42 @@ function drawDoor() {
         }
     }
 
-    // 2. Xử lý nét HIỆN TẠI (Đang di chuyển hoặc đang vẽ)
+    // 2. Xử lý nét HIỆN TẠI
     if (doorIndex < doorPath.length) {
         const s = doorPath[doorIndex];
-        const x1 = s[0], y1 = s[1], x2 = s[2], y2 = s[3];
         const penDown = s[4];
 
-        // Tính toán vị trí hiện tại của "đầu bút"
-        const x = x1 + (x2 - x1) * doorProgress;
-        const y = y1 + (y2 - y1) * doorProgress;
+        // --- ĐÂY LÀ PHẦN THAY ĐỔI QUAN TRỌNG ---
+        // Biến progress thực tế đã được uốn cong
+        const easedProgress = easeInOutQuad(doorProgress);
+        
+        const x = s[0] + (s[2] - s[0]) * easedProgress;
+        const y = s[1] + (s[3] - s[1]) * easedProgress;
+        // ---------------------------------------
 
-        // CHỈ VẼ NÉT nếu penDown là true
         if (penDown) {
             ctx.beginPath();
-            ctx.moveTo(x1, y1);
+            ctx.moveTo(s[0], s[1]);
             ctx.lineTo(x, y);
             ctx.stroke();
         }
 
-        // LUÔN VẼ CHẤM TRÒN (Đầu bút) bất kể penDown true hay false
+        // Luôn vẽ chấm tròn (bút)
         ctx.beginPath();
         ctx.fillStyle = "black";
         ctx.arc(x, y, 4, 0, Math.PI * 2);
         ctx.fill();
 
-        // Cập nhật tiến độ
-        doorProgress += 0.02; 
+        doorProgress += 0.015; // Giảm tốc độ lại một chút để cảm nhận rõ hiệu ứng lướt
         if (doorProgress >= 1) {
             doorProgress = 0;
             doorIndex++;
         }
     } else {
-        // Sau khi vẽ xong toàn bộ, nếu muốn giữ lại chấm tròn ở điểm cuối cùng:
-        const lastPoint = doorPath[doorPath.length - 1];
+        // Giữ bút ở điểm cuối cùng sau khi xong
+        const last = doorPath[doorPath.length - 1];
         ctx.beginPath();
-        ctx.arc(lastPoint[2], lastPoint[3], 4, 0, Math.PI * 2);
+        ctx.arc(last[2], last[3], 4, 0, Math.PI * 2);
         ctx.fill();
     }
 }
