@@ -91,149 +91,87 @@ const doorPath = [
 
 ]
 
-function draw(){
+function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";
+    ctx.lineCap = "round";
 
-ctx.clearRect(0,0,W,H)
+    // --- VẼ TƯỜNG (Nhiều nét cùng lúc từ tâm) ---
+    for (let g = 0; g <= groupIndex && g < lineGroups.length; g++) {
+        for (let line of lineGroups[g]) {
+            const [x1, y1, x2, y2] = line;
+            const cx = (x1 + x2) / 2;
+            const cy = (y1 + y2) / 2;
+            const dx = (x2 - x1) / 2;
+            const dy = (y2 - y1) / 2;
 
-ctx.lineWidth=2
-ctx.strokeStyle="black"
-ctx.lineCap="round"
+            ctx.beginPath();
+            if (g < groupIndex) {
+                // Nhóm tường đã vẽ xong: Giữ nguyên trên màn hình
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+            } else if (g === groupIndex) {
+                // Nhóm tường đang vẽ: Toàn bộ các nét trong group lan ra từ tâm
+                ctx.moveTo(cx - dx * progress, cy - dy * progress);
+                ctx.lineTo(cx + dx * progress, cy + dy * progress);
+            }
+            ctx.stroke();
+        }
+    }
 
+    // --- CẬP NHẬT TIẾN ĐỘ TƯỜNG ---
+    if (groupIndex < lineGroups.length) {
+        progress += 0.01;
+        if (progress >= 1) {
+            progress = 0;
+            groupIndex++;
+        }
+    } 
+    // --- VẼ CỬA (Chỉ bắt đầu khi tường xong) ---
+    else {
+        drawDoor();
+    }
 
-// ===== LUÔN VẼ LẠI CÁC LINE GROUP =====
-for(let g=0; g<lineGroups.length; g++){
-
-for(let line of lineGroups[g]){
-
-const x1=line[0]
-const y1=line[1]
-const x2=line[2]
-const y2=line[3]
-
-const cx=(x1+x2)/2
-const cy=(y1+y2)/2
-
-const dx=(x2-x1)/2
-const dy=(y2-y1)/2
-
-ctx.beginPath()
-
-if(g < groupIndex){
-
-// đã vẽ xong
-ctx.moveTo(x1,y1)
-ctx.lineTo(x2,y2)
-
-}
-
-else if(g === groupIndex){
-
-// đang vẽ
-ctx.moveTo(cx-dx*progress,cy-dy*progress)
-ctx.lineTo(cx+dx*progress,cy+dy*progress)
-
-}
-
-ctx.stroke()
-
-}
-
-}
-
-
-// ===== UPDATE ANIMATION =====
-if(groupIndex < lineGroups.length){
-
-progress += 0.01
-
-if(progress >= 1){
-
-progress = 0
-groupIndex++
-
-if(groupIndex < lineGroups.length){
-
-setTimeout(draw,500)
-return
-
-}
-
-}
-
-}
-
-
-// ===== VẼ CỬA =====
-if(groupIndex >= lineGroups.length){
-
-drawDoor()
-
-}
-
-
-requestAnimationFrame(draw)
-
+    requestAnimationFrame(draw);
 }
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
-function drawDoor(){
+function drawDoor() {
+    // Vòng lặp này luôn chạy để giữ những nét đã vẽ không bị mất
+    for (let i = 0; i < doorPath.length; i++) {
+        const s = doorPath[i];
+        const penDown = s[4]; // true là vẽ, false là di chuyển (nhấc bút)
+        if (!penDown) continue;
 
-if(doorIndex >= doorPath.length) return
+        ctx.beginPath();
+        if (i < doorIndex) {
+            // Các nét trước đó: Vẽ nguyên đường thẳng
+            ctx.moveTo(s[0], s[1]);
+            ctx.lineTo(s[2], s[3]);
+            ctx.stroke();
+        } else if (i === doorIndex) {
+            // Nét hiện tại: Vẽ từ điểm đầu đến vị trí progress
+            const x = s[0] + (s[2] - s[0]) * doorProgress;
+            const y = s[1] + (s[3] - s[1]) * doorProgress;
+            ctx.moveTo(s[0], s[1]);
+            ctx.lineTo(x, y);
+            ctx.stroke();
 
+            // Thêm chấm nhỏ giả làm đầu bút cho sinh động
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
 
-// ===== vẽ lại các đoạn cửa đã xong =====
-for(let i=0;i<doorIndex;i++){
-
-const s = doorPath[i]
-
-if(!s[4]) continue   // nếu là move không vẽ
-
-ctx.beginPath()
-ctx.moveTo(s[0],s[1])
-ctx.lineTo(s[2],s[3])
-ctx.stroke()
-
-}
-
-
-// ===== đoạn đang vẽ =====
-const s = doorPath[doorIndex]
-
-const x1 = s[0]
-const y1 = s[1]
-const x2 = s[2]
-const y2 = s[3]
-const penDown = s[4]
-
-const x = x1 + (x2-x1)*doorProgress
-const y = y1 + (y2-y1)*doorProgress
-
-
-if(penDown){
-
-ctx.beginPath()
-ctx.moveTo(x1,y1)
-ctx.lineTo(x,y)
-ctx.stroke()
-
-}
-
-
-// ===== chấm vẽ =====
-ctx.beginPath()
-ctx.arc(x,y,4,0,Math.PI*2)
-ctx.fill()
-
-
-doorProgress += 0.02
-
-
-if(doorProgress >= 1){
-
-doorProgress = 0
-doorIndex++
-
-}
-
+    // Cập nhật tiến độ vẽ cửa từng nét một
+    if (doorIndex < doorPath.length) {
+        doorProgress += 0.02; // Tốc độ vẽ tay
+        if (doorProgress >= 1) {
+            doorProgress = 0;
+            doorIndex++;
+        }
+    }
 }
 
 draw()
