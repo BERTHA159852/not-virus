@@ -13,8 +13,6 @@ let progress = 0
 let groupIndex = 0
 let doorIndex = 0
 let doorProgress = 0
-let dotX = 0
-let dotY = 0
 
 
 
@@ -131,23 +129,12 @@ ctx.lineTo(x2,y2)
 else if(g === groupIndex){
 
 // đang vẽ
-ctx.moveTo(x1,y1)
-
-const x = x1 + (x2-x1)*progress
-const y = y1 + (y2-y1)*progress
-
-ctx.lineTo(x,y)
-
-dotX = x
-dotY = y
+ctx.moveTo(cx-dx*progress,cy-dy*progress)
+ctx.lineTo(cx+dx*progress,cy+dy*progress)
 
 }
 
 ctx.stroke()
-
-ctx.beginPath()
-ctx.arc(dotX,dotY,4,0,Math.PI*2)
-ctx.fill()
 
 }
 
@@ -190,23 +177,49 @@ requestAnimationFrame(draw)
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
 function drawDoor(){
 
-let s = doorPath[doorIndex]
-
-let x = s[0] + (s[2]-s[0]) * doorProgress
-let y = s[1] + (s[3]-s[1]) * doorProgress
+if(doorIndex >= doorPath.length) return
 
 
-if(s[4]){
+// ===== vẽ các đoạn đã xong =====
+for(let i=0;i<doorIndex;i++){
+
+const s = doorPath[i]
+
+if(!s[4]) continue
 
 ctx.beginPath()
 ctx.moveTo(s[0],s[1])
+ctx.lineTo(s[2],s[3])
+ctx.stroke()
+
+}
+
+
+// ===== đoạn đang animate =====
+const s = doorPath[doorIndex]
+
+const x1=s[0]
+const y1=s[1]
+const x2=s[2]
+const y2=s[3]
+const penDown=s[4]
+
+
+const x = x1 + (x2-x1)*doorProgress
+const y = y1 + (y2-y1)*doorProgress
+
+
+if(penDown){
+
+ctx.beginPath()
+ctx.moveTo(x1,y1)
 ctx.lineTo(x,y)
 ctx.stroke()
 
 }
 
 
-// vẽ chấm
+// chấm bút
 ctx.beginPath()
 ctx.arc(x,y,4,0,Math.PI*2)
 ctx.fill()
