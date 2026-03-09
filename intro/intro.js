@@ -13,6 +13,8 @@ let progress = 0
 let groupIndex = 0
 let doorIndex = 0
 let doorProgress = 0
+let dotX = 0
+let dotY = 0
 
 
 
@@ -129,12 +131,23 @@ ctx.lineTo(x2,y2)
 else if(g === groupIndex){
 
 // đang vẽ
-ctx.moveTo(cx-dx*progress,cy-dy*progress)
-ctx.lineTo(cx+dx*progress,cy+dy*progress)
+ctx.moveTo(x1,y1)
+
+const x = x1 + (x2-x1)*progress
+const y = y1 + (y2-y1)*progress
+
+ctx.lineTo(x,y)
+
+dotX = x
+dotY = y
 
 }
 
 ctx.stroke()
+
+ctx.beginPath()
+ctx.arc(dotX,dotY,4,0,Math.PI*2)
+ctx.fill()
 
 }
 
