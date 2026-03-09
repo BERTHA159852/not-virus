@@ -137,40 +137,53 @@ function draw() {
 }
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
 function drawDoor() {
-    // Vòng lặp này luôn chạy để giữ những nét đã vẽ không bị mất
-    for (let i = 0; i < doorPath.length; i++) {
+    // 1. Vẽ lại các nét ĐÃ HOÀN THÀNH trước đó
+    for (let i = 0; i < doorIndex; i++) {
         const s = doorPath[i];
-        const penDown = s[4]; // true là vẽ, false là di chuyển (nhấc bút)
-        if (!penDown) continue;
-
-        ctx.beginPath();
-        if (i < doorIndex) {
-            // Các nét trước đó: Vẽ nguyên đường thẳng
+        if (s[4]) { // Chỉ vẽ nếu đoạn đó yêu cầu penDown (true)
+            ctx.beginPath();
             ctx.moveTo(s[0], s[1]);
             ctx.lineTo(s[2], s[3]);
             ctx.stroke();
-        } else if (i === doorIndex) {
-            // Nét hiện tại: Vẽ từ điểm đầu đến vị trí progress
-            const x = s[0] + (s[2] - s[0]) * doorProgress;
-            const y = s[1] + (s[3] - s[1]) * doorProgress;
-            ctx.moveTo(s[0], s[1]);
-            ctx.lineTo(x, y);
-            ctx.stroke();
-
-            // Thêm chấm nhỏ giả làm đầu bút cho sinh động
-            ctx.beginPath();
-            ctx.arc(x, y, 3, 0, Math.PI * 2);
-            ctx.fill();
         }
     }
 
-    // Cập nhật tiến độ vẽ cửa từng nét một
+    // 2. Xử lý nét HIỆN TẠI (Đang di chuyển hoặc đang vẽ)
     if (doorIndex < doorPath.length) {
-        doorProgress += 0.02; // Tốc độ vẽ tay
+        const s = doorPath[doorIndex];
+        const x1 = s[0], y1 = s[1], x2 = s[2], y2 = s[3];
+        const penDown = s[4];
+
+        // Tính toán vị trí hiện tại của "đầu bút"
+        const x = x1 + (x2 - x1) * doorProgress;
+        const y = y1 + (y2 - y1) * doorProgress;
+
+        // CHỈ VẼ NÉT nếu penDown là true
+        if (penDown) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        // LUÔN VẼ CHẤM TRÒN (Đầu bút) bất kể penDown true hay false
+        ctx.beginPath();
+        ctx.fillStyle = "black";
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cập nhật tiến độ
+        doorProgress += 0.02; 
         if (doorProgress >= 1) {
             doorProgress = 0;
             doorIndex++;
         }
+    } else {
+        // Sau khi vẽ xong toàn bộ, nếu muốn giữ lại chấm tròn ở điểm cuối cùng:
+        const lastPoint = doorPath[doorPath.length - 1];
+        ctx.beginPath();
+        ctx.arc(lastPoint[2], lastPoint[3], 4, 0, Math.PI * 2);
+        ctx.fill();
     }
 }
 
