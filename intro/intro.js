@@ -84,13 +84,13 @@ const lineGroups = [
 
 const doorPath = [
 
-[W*0.42, H*0.27, W*0.55, H*0.3, true],   // cạnh trên
-[W*0.55, H*0.3, W*0.55, H*0.7, true],   // cạnh phải
-[W*0.55, H*0.7, W*0.45, H*0.7, true],   // cạnh dưới
-[W*0.45, H*0.7, W*0.45, H*0.3, true],   // cạnh trái
+[W*0.4+H*0.02, H*0.27, W*0.55, H*0.3, true],   
+[W*0.55, H*0.3, W*0.55, H*0.7, true],   
+[W*0.55, H*0.7, W*0.45, H*0.7, true],   
+[W*0.45, H*0.7, W*0.45, H*0.3, true],   
 
-[W*0.45, H*0.5, W*0.52, H*0.5, false],  // di chuyển đến tay nắm
-[W*0.52, H*0.5, W*0.53, H*0.5, true]    // vẽ tay nắm
+[W*0.45, H*0.5, W*0.52, H*0.5, false],  
+[W*0.52, H*0.5, W*0.53, H*0.5, true]    
 
 ]
 
