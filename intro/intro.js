@@ -1,55 +1,78 @@
-function startIntro(){
+// ===== LẤY CANVAS =====
 
-const canvas=document.getElementById("intro-canvas")
-const ctx=canvas.getContext("2d")
-
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
-
-const H=canvas.height
-const W=canvas.width
-
-let progress=0
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
 
 
-function draw(){
+// ===== CHỈNH KÍCH THƯỚC CANVAS =====
 
-ctx.clearRect(0,0,W,H)
-
-ctx.lineWidth=2
-
-// ví dụ 1 đường
-
-const x1=W/2-H*0.5
-const x2=W/2+H*0.5
-const y=H*0.4
-
-const cx=(x1+x2)/2
-const dx=(x2-x1)/2
-
-ctx.beginPath()
-
-ctx.moveTo(cx-dx*progress,y)
-ctx.lineTo(cx+dx*progress,y)
-
-ctx.stroke()
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 
-progress+=0.01
+// ===== STYLE CỦA ĐƯỜNG =====
 
-if(progress<1){
+ctx.lineWidth = 3;
+ctx.strokeStyle = "black";
 
-requestAnimationFrame(draw)
 
-}else{
+// ===== HÀM VẼ MỘT ĐƯỜNG =====
 
-// intro xong → load story
-loadStory()
+function drawLine(x1, y1, x2, y2){
+
+    ctx.beginPath();      // bắt đầu path mới
+
+    ctx.moveTo(x1, y1);   // di chuyển bút tới điểm đầu
+
+    ctx.lineTo(x2, y2);   // vẽ tới điểm cuối
+
+    ctx.stroke();         // render đường
 
 }
 
+
+// ===== HÀM CHỜ (sleep) =====
+
+function sleep(ms){
+
+    return new Promise(resolve => setTimeout(resolve, ms));
+
 }
 
-draw()
+
+// ===== DANH SÁCH CÁC ĐƯỜNG =====
+
+let lines = [
+
+    [100,100,300,100],  // A -> B
+    [300,100,300,300],  // C -> D
+    [300,300,100,300],  // E -> F
+    [100,300,100,100],  // G -> H
+    [100,200,300,200]   // I -> J
+
+];
+
+
+// ===== HÀM INTRO =====
+
+async function drawIntro(){
+
+    for(let line of lines){
+
+        let x1 = line[0];
+        let y1 = line[1];
+        let x2 = line[2];
+        let y2 = line[3];
+
+        drawLine(x1,y1,x2,y2);
+
+        await sleep(1000); // đợi 1 giây
+
+    }
 
 }
+
+
+// ===== CHẠY INTRO =====
+
+drawIntro();
