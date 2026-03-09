@@ -45,37 +45,47 @@ ctx.lineWidth = 2
 ctx.strokeStyle = "black"
 ctx.lineCap = "round"
 
-
-
 for(let g=0; g<=groupIndex; g++){
 
 for(let line of lineGroups[g]){
 
-const x1 = line[0]
-const y1 = line[1]
-const x2 = line[2]
-const y2 = line[3]
+const x1=line[0]
+const y1=line[1]
+const x2=line[2]
+const y2=line[3]
 
-const cx = (x1+x2)/2
-const cy = (y1+y2)/2
+const cx=(x1+x2)/2
+const cy=(y1+y2)/2
 
-const dx = (x2-x1)/2
-const dy = (y2-y1)/2
+const dx=(x2-x1)/2
+const dy=(y2-y1)/2
 
 
 ctx.beginPath()
 
+// nhóm đã xong
+if(g < groupIndex){
+
+ctx.moveTo(x1,y1)
+ctx.lineTo(x2,y2)
+
+}
+
+// nhóm đang vẽ
+else{
+
 ctx.moveTo(cx-dx*progress, cy-dy*progress)
 ctx.lineTo(cx+dx*progress, cy+dy*progress)
+
+}
 
 ctx.stroke()
 
 }
-
 }
 
 
-progress += 0.02
+progress += 0.01
 
 
 if(progress < 1){
