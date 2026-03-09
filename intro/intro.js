@@ -95,15 +95,13 @@ function draw(){
 
 ctx.clearRect(0,0,W,H)
 
-ctx.lineWidth = 2
-ctx.strokeStyle = "black"
-ctx.lineCap = "round"
+ctx.lineWidth=2
+ctx.strokeStyle="black"
+ctx.lineCap="round"
 
 
-// ===== VẼ CÁC LINE GROUP =====
-if(groupIndex < lineGroups.length){
-
-for(let g=0; g<=groupIndex; g++){
+// ===== LUÔN VẼ LẠI CÁC LINE GROUP =====
+for(let g=0; g<lineGroups.length; g++){
 
 for(let line of lineGroups[g]){
 
@@ -120,19 +118,19 @@ const dy=(y2-y1)/2
 
 ctx.beginPath()
 
-// group đã hoàn thành
 if(g < groupIndex){
 
+// đã vẽ xong
 ctx.moveTo(x1,y1)
 ctx.lineTo(x2,y2)
 
 }
 
-// group đang vẽ
-else{
+else if(g === groupIndex){
 
-ctx.moveTo(cx-dx*progress, cy-dy*progress)
-ctx.lineTo(cx+dx*progress, cy+dy*progress)
+// đang vẽ
+ctx.moveTo(cx-dx*progress,cy-dy*progress)
+ctx.lineTo(cx+dx*progress,cy+dy*progress)
 
 }
 
@@ -142,9 +140,11 @@ ctx.stroke()
 
 }
 
-// tăng progress
-progress += 0.005
 
+// ===== UPDATE ANIMATION =====
+if(groupIndex < lineGroups.length){
+
+progress += 0.01
 
 if(progress >= 1){
 
@@ -160,22 +160,20 @@ return
 
 }
 
-requestAnimationFrame(draw)
-
 }
 
 
-// ===== BẮT ĐẦU VẼ CỬA =====
-else{
+// ===== VẼ CỬA =====
+if(groupIndex >= lineGroups.length){
 
 drawDoor()
 
+}
+
+
 requestAnimationFrame(draw)
 
 }
-
-}
-
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
 function drawDoor(){
 
