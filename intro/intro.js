@@ -81,7 +81,7 @@ const lineGroups = [
 
 const doorPath = [
 
-[W*0.45, H*0.3, W*0.55, H*0.3, true],   // cạnh trên
+[W*0.42, H*0.27, W*0.55, H*0.3, true],   // cạnh trên
 [W*0.55, H*0.3, W*0.55, H*0.7, true],   // cạnh phải
 [W*0.55, H*0.7, W*0.45, H*0.7, true],   // cạnh dưới
 [W*0.45, H*0.7, W*0.45, H*0.3, true],   // cạnh trái
@@ -180,12 +180,12 @@ function drawDoor(){
 if(doorIndex >= doorPath.length) return
 
 
-// ===== vẽ các đoạn đã xong =====
+// ===== vẽ lại các đoạn cửa đã xong =====
 for(let i=0;i<doorIndex;i++){
 
 const s = doorPath[i]
 
-if(!s[4]) continue
+if(!s[4]) continue   // nếu là move không vẽ
 
 ctx.beginPath()
 ctx.moveTo(s[0],s[1])
@@ -195,15 +195,14 @@ ctx.stroke()
 }
 
 
-// ===== đoạn đang animate =====
+// ===== đoạn đang vẽ =====
 const s = doorPath[doorIndex]
 
-const x1=s[0]
-const y1=s[1]
-const x2=s[2]
-const y2=s[3]
-const penDown=s[4]
-
+const x1 = s[0]
+const y1 = s[1]
+const x2 = s[2]
+const y2 = s[3]
+const penDown = s[4]
 
 const x = x1 + (x2-x1)*doorProgress
 const y = y1 + (y2-y1)*doorProgress
@@ -219,7 +218,7 @@ ctx.stroke()
 }
 
 
-// chấm bút
+// ===== chấm vẽ =====
 ctx.beginPath()
 ctx.arc(x,y,4,0,Math.PI*2)
 ctx.fill()
