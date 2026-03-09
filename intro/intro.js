@@ -145,46 +145,42 @@ function draw() {
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
 
 function drawDoor() {
-    // (Phần vẽ lại các nét cũ giữ nguyên...)
+    // 1. Vẽ lại các nét đã xong để duy trì hình ảnh
     for (let i = 0; i < doorIndex; i++) {
         const s = doorPath[i];
-        if (s[4]) {
-            ctx.beginPath(); ctx.moveTo(s[0], s[1]); ctx.lineTo(s[2], s[3]); ctx.stroke();
+        if (s[4]) { 
+            ctx.beginPath();
+            ctx.moveTo(s[0], s[1]);
+            ctx.lineTo(s[2], s[3]);
+            ctx.stroke();
         }
     }
 
+    // 2. Xử lý nét đang vẽ hoặc đang di chuyển
     if (doorIndex < doorPath.length) {
         const s = doorPath[doorIndex];
-        const x1 = s[0], y1 = s[1], x2 = s[2], y2 = s[3], penDown = s[4];
+        const x1 = s[0], y1 = s[1], x2 = s[2], y2 = s[3];
+        const penDown = s[4];
 
         const dx = x2 - x1;
         const dy = y2 - y1;
         const distance = Math.sqrt(dx * dx + dy * dy) || 1;
 
-        // --- ĐIỀU CHỈNH TỐC ĐỘ TẠI ĐÂY ---
+        // --- THÔNG SỐ TỐC ĐỘ TRUNG BÌNH ---
+        const baseSpeed = 6;           // 6 pixel mỗi khung hình (Mức trung bình)
+        const moveMultiplier = 2.0;    // Di chuyển nhanh gấp đôi khi nhấc bút
         
-        // 1. Tốc độ cơ bản cực thấp để tạo vẻ cẩn thận (3 pixel/frame)
-        let baseSpeed = 3; 
+        const currentSpeed = penDown ? baseSpeed : (baseSpeed * moveMultiplier);
+        doorProgress += currentSpeed / distance;
 
-        // 2. Gia tốc theo thời gian: Càng về các nét sau càng nhanh một chút
-        // (Ví dụ: nét thứ 5 sẽ nhanh hơn nét thứ 1)
-        const experienceMultiplier = 1 + (doorIndex * 0.2); 
-
-        // 3. Hệ số di chuyển khi nhấc bút (vẫn giữ nhanh hơn vẽ một chút)
-        const moveMultiplier = penDown ? 1 : 2;
-
-        // Tính toán tốc độ cuối cùng
-        const finalSpeed = baseSpeed * experienceMultiplier * moveMultiplier;
-        
-        doorProgress += finalSpeed / distance;
-
-        // --- PHẦN VẼ VÀ EASING ---
-        const currentProgress = Math.min(doorProgress, 1);
-        const easedT = easeInOutQuad(currentProgress); // Giữ mượt ở 2 đầu nét vẽ
+        // Giới hạn progress ở mức 1
+        const p = Math.min(doorProgress, 1);
+        const easedT = easeInOutQuad(p);
 
         const curX = x1 + dx * easedT;
         const curY = y1 + dy * easedT;
 
+        // Vẽ nét vẽ (nếu đang đè bút)
         if (penDown) {
             ctx.beginPath();
             ctx.moveTo(x1, y1);
@@ -192,10 +188,10 @@ function drawDoor() {
             ctx.stroke();
         }
 
-        // Vẽ đầu bút
+        // Luôn vẽ chấm tròn (đầu bút)
         ctx.beginPath();
         ctx.fillStyle = "black";
-        ctx.arc(curX, curY, 3.5, 0, Math.PI * 2);
+        ctx.arc(curX, curY, 4, 0, Math.PI * 2);
         ctx.fill();
 
         if (doorProgress >= 1) {
@@ -203,9 +199,11 @@ function drawDoor() {
             doorIndex++;
         }
     } else {
-        // Giữ bút ở điểm cuối
+        // Giữ bút đứng yên tại điểm cuối cùng
         const last = doorPath[doorPath.length - 1];
-        ctx.beginPath(); ctx.arc(last[2], last[3], 3.5, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath();
+        ctx.arc(last[2], last[3], 4, 0, Math.PI * 2);
+        ctx.fill();
     }
 }
 
