@@ -180,10 +180,12 @@ function drawDoor(){
 if(doorIndex >= doorPath.length) return
 
 
-// ===== vẽ lại toàn bộ đoạn cửa đã hoàn thành =====
+// ===== vẽ lại các đoạn cửa đã xong =====
 for(let i=0;i<doorIndex;i++){
 
 const s = doorPath[i]
+
+if(!s[4]) continue   // nếu là move không vẽ
 
 ctx.beginPath()
 ctx.moveTo(s[0],s[1])
@@ -193,25 +195,30 @@ ctx.stroke()
 }
 
 
-// ===== vẽ đoạn đang animate =====
+// ===== đoạn đang vẽ =====
 const s = doorPath[doorIndex]
 
-const x1=s[0]
-const y1=s[1]
-const x2=s[2]
-const y2=s[3]
+const x1 = s[0]
+const y1 = s[1]
+const x2 = s[2]
+const y2 = s[3]
+const penDown = s[4]
 
 const x = x1 + (x2-x1)*doorProgress
 const y = y1 + (y2-y1)*doorProgress
 
+
+if(penDown){
 
 ctx.beginPath()
 ctx.moveTo(x1,y1)
 ctx.lineTo(x,y)
 ctx.stroke()
 
+}
 
-// ===== chấm bút =====
+
+// ===== chấm vẽ =====
 ctx.beginPath()
 ctx.arc(x,y,4,0,Math.PI*2)
 ctx.fill()
