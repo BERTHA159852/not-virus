@@ -1,78 +1,111 @@
-// ===== LẤY CANVAS =====
+function startIntro(){
 
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById("intro-canvas")
+const ctx = canvas.getContext("2d")
 
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
 
-// ===== CHỈNH KÍCH THƯỚC CANVAS =====
+const H = canvas.height
+const W = canvas.width
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-
-// ===== STYLE CỦA ĐƯỜNG =====
-
-ctx.lineWidth = 3;
-ctx.strokeStyle = "black";
+let progress = 0
+let groupIndex = 0
 
 
-// ===== HÀM VẼ MỘT ĐƯỜNG =====
 
-function drawLine(x1, y1, x2, y2){
+// chia line thành từng nhóm
+const lineGroups = [
 
-    ctx.beginPath();      // bắt đầu path mới
+[
+[W/2-H*0.5, H*0.4, W/2+H*0.5, H*0.4],
+[W/2-H*0.5, H*0.6, W/2+H*0.5, H*0.6],
+[W/2, H*0.2, W/2, H*0.8],
+[W/2-H*0.3, H*0.3, W/2-H*0.3, H*0.7],
+[W/2+H*0.3, H*0.3, W/2+H*0.3, H*0.7]
+],
 
-    ctx.moveTo(x1, y1);   // di chuyển bút tới điểm đầu
+[
+[W/2-H*0.2, H*0.5, W/2+H*0.2, H*0.5],
+[W/2-H*0.1, H*0.35, W/2-H*0.1, H*0.65],
+[W/2+H*0.1, H*0.35, W/2+H*0.1, H*0.65],
+[W/2-H*0.15, H*0.45, W/2-H*0.05, H*0.45],
+[W/2+H*0.05, H*0.45, W/2+H*0.15, H*0.45]
+]
 
-    ctx.lineTo(x2, y2);   // vẽ tới điểm cuối
+]
 
-    ctx.stroke();         // render đường
+
+
+function draw(){
+
+ctx.clearRect(0,0,W,H)
+
+ctx.lineWidth = 2
+ctx.strokeStyle = "black"
+ctx.lineCap = "round"
+
+
+
+for(let g=0; g<=groupIndex; g++){
+
+for(let line of lineGroups[g]){
+
+const x1 = line[0]
+const y1 = line[1]
+const x2 = line[2]
+const y2 = line[3]
+
+const cx = (x1+x2)/2
+const cy = (y1+y2)/2
+
+const dx = (x2-x1)/2
+const dy = (y2-y1)/2
+
+
+ctx.beginPath()
+
+ctx.moveTo(cx-dx*progress, cy-dy*progress)
+ctx.lineTo(cx+dx*progress, cy+dy*progress)
+
+ctx.stroke()
+
+}
 
 }
 
 
-// ===== HÀM CHỜ (sleep) =====
-
-function sleep(ms){
-
-    return new Promise(resolve => setTimeout(resolve, ms));
-
-}
+progress += 0.02
 
 
-// ===== DANH SÁCH CÁC ĐƯỜNG =====
+if(progress < 1){
 
-let lines = [
+requestAnimationFrame(draw)
 
-    [100,100,300,100],  // A -> B
-    [300,100,300,300],  // C -> D
-    [300,300,100,300],  // E -> F
-    [100,300,100,100],  // G -> H
-    [100,200,300,200]   // I -> J
+}else{
 
-];
+// reset progress
+progress = 0
 
 
-// ===== HÀM INTRO =====
+// sang nhóm tiếp theo
+groupIndex ++
 
-async function drawIntro(){
 
-    for(let line of lines){
+if(groupIndex < lineGroups.length){
 
-        let x1 = line[0];
-        let y1 = line[1];
-        let x2 = line[2];
-        let y2 = line[3];
+setTimeout(draw,1000)
 
-        drawLine(x1,y1,x2,y2);
+}else{
 
-        await sleep(1000); // đợi 1 giây
-
-    }
+loadStory()
 
 }
 
+}
 
-// ===== CHẠY INTRO =====
+}
 
-drawIntro();
+draw()
+
+}
