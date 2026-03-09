@@ -143,11 +143,16 @@ function draw() {
     requestAnimationFrame(draw);
 }
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
+// 1. Hàm Easing để chuyển động trông "tự nhiên" hơn
+function easeInOutQuad(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
 function drawDoor() {
-    // 1. Vẽ lại các nét ĐÃ HOÀN THÀNH
+    // Vẽ lại các nét đã hoàn tất để không bị mất hình
     for (let i = 0; i < doorIndex; i++) {
         const s = doorPath[i];
-        if (s[4]) { 
+        if (s[4]) { // Nếu là nét vẽ (penDown = true)
             ctx.beginPath();
             ctx.moveTo(s[0], s[1]);
             ctx.lineTo(s[2], s[3]);
@@ -155,39 +160,54 @@ function drawDoor() {
         }
     }
 
-    // 2. Xử lý nét HIỆN TẠI
     if (doorIndex < doorPath.length) {
         const s = doorPath[doorIndex];
+        const x1 = s[0], y1 = s[1], x2 = s[2], y2 = s[3];
         const penDown = s[4];
 
-        // --- ĐÂY LÀ PHẦN THAY ĐỔI QUAN TRỌNG ---
-        // Biến progress thực tế đã được uốn cong
-        const easedProgress = easeInOutQuad(doorProgress);
-        
-        const x = s[0] + (s[2] - s[0]) * easedProgress;
-        const y = s[1] + (s[3] - s[1]) * easedProgress;
-        // ---------------------------------------
+        // --- TÍNH TOÁN TỐC ĐỘ DỰA TRÊN KHOẢNG CÁCH ---
+        const dx = x2 - x1;
+        const dy = y2 - y1;
+        const distance = Math.sqrt(dx * dx + dy * dy) || 1; // Tránh chia cho 0
 
+        // Tốc độ cơ bản (pixel mỗi khung hình)
+        let baseSpeed = 8; 
+        
+        // Nếu nhấc bút (penDown = false), tăng tốc độ lên gấp 2.5 lần
+        const moveMultiplier = penDown ? 1 : 2.5;
+        
+        // Cập nhật doorProgress dựa trên quãng đường thực tế
+        doorProgress += (baseSpeed * moveMultiplier) / distance;
+
+        // Giới hạn progress tối đa là 1
+        const currentProgress = Math.min(doorProgress, 1);
+        
+        // Áp dụng Easing để bắt đầu và kết thúc nét vẽ mượt hơn
+        const easedT = easeInOutQuad(currentProgress);
+
+        const curX = x1 + dx * easedT;
+        const curY = y1 + dy * easedT;
+
+        // Chỉ vẽ nét nếu bút đang đè xuống
         if (penDown) {
             ctx.beginPath();
-            ctx.moveTo(s[0], s[1]);
-            ctx.lineTo(x, y);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(curX, curY);
             ctx.stroke();
         }
 
-        // Luôn vẽ chấm tròn (bút)
+        // LUÔN vẽ chấm tròn (đầu bút) để thấy nó "bay" qua các điểm nối
         ctx.beginPath();
         ctx.fillStyle = "black";
-        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.arc(curX, curY, 4, 0, Math.PI * 2);
         ctx.fill();
 
-        doorProgress += 0.015; // Giảm tốc độ lại một chút để cảm nhận rõ hiệu ứng lướt
         if (doorProgress >= 1) {
             doorProgress = 0;
             doorIndex++;
         }
     } else {
-        // Giữ bút ở điểm cuối cùng sau khi xong
+        // Giữ bút đứng yên tại điểm cuối cùng sau khi vẽ xong
         const last = doorPath[doorPath.length - 1];
         ctx.beginPath();
         ctx.arc(last[2], last[3], 4, 0, Math.PI * 2);
