@@ -11,6 +11,8 @@ const W = canvas.width
 
 let progress = 0
 let groupIndex = 0
+let doorIndex = 0
+let doorProgress = 0
 
 
 
@@ -77,7 +79,17 @@ const lineGroups = [
 
 ]
 
+const doorPath = [
 
+[W*0.45, H*0.3, W*0.55, H*0.3, true],   // cạnh trên
+[W*0.55, H*0.3, W*0.55, H*0.7, true],   // cạnh phải
+[W*0.55, H*0.7, W*0.45, H*0.7, true],   // cạnh dưới
+[W*0.45, H*0.7, W*0.45, H*0.3, true],   // cạnh trái
+
+[W*0.45, H*0.5, W*0.52, H*0.5, false],  // di chuyển đến tay nắm
+[W*0.52, H*0.5, W*0.53, H*0.5, true]    // vẽ tay nắm
+
+]
 
 function draw(){
 
@@ -86,6 +98,10 @@ ctx.clearRect(0,0,W,H)
 ctx.lineWidth = 2
 ctx.strokeStyle = "black"
 ctx.lineCap = "round"
+
+
+// ===== VẼ CÁC LINE GROUP =====
+if(groupIndex < lineGroups.length){
 
 for(let g=0; g<=groupIndex; g++){
 
@@ -102,10 +118,9 @@ const cy=(y1+y2)/2
 const dx=(x2-x1)/2
 const dy=(y2-y1)/2
 
-
 ctx.beginPath()
 
-// nhóm đã xong
+// group đã hoàn thành
 if(g < groupIndex){
 
 ctx.moveTo(x1,y1)
@@ -113,7 +128,7 @@ ctx.lineTo(x2,y2)
 
 }
 
-// nhóm đang vẽ
+// group đang vẽ
 else{
 
 ctx.moveTo(cx-dx*progress, cy-dy*progress)
@@ -124,35 +139,75 @@ ctx.lineTo(cx+dx*progress, cy+dy*progress)
 ctx.stroke()
 
 }
+
 }
 
-
+// tăng progress
 progress += 0.005
 
 
-if(progress < 1){
+if(progress >= 1){
 
-requestAnimationFrame(draw)
-
-}else{
-
-// reset progress
 progress = 0
-
-
-// sang nhóm tiếp theo
-groupIndex ++
-
+groupIndex++
 
 if(groupIndex < lineGroups.length){
 
 setTimeout(draw,500)
-
-}else{
-
-loadStory()
+return
 
 }
+
+}
+
+requestAnimationFrame(draw)
+
+}
+
+
+// ===== BẮT ĐẦU VẼ CỬA =====
+else{
+
+drawDoor()
+
+requestAnimationFrame(draw)
+
+}
+
+}
+
+  // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
+function drawDoor(){
+
+let s = doorPath[doorIndex]
+
+let x = s[0] + (s[2]-s[0]) * doorProgress
+let y = s[1] + (s[3]-s[1]) * doorProgress
+
+
+if(s[4]){
+
+ctx.beginPath()
+ctx.moveTo(s[0],s[1])
+ctx.lineTo(x,y)
+ctx.stroke()
+
+}
+
+
+// vẽ chấm
+ctx.beginPath()
+ctx.arc(x,y,4,0,Math.PI*2)
+ctx.fill()
+
+
+doorProgress += 0.02
+
+
+if(doorProgress >= 1){
+
+doorProgress = 0
+doorIndex++
 
 }
 
