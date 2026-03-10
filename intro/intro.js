@@ -14,6 +14,31 @@ let groupIndex = 0
 let doorIndex = 0
 let doorProgress = 0
 
+let isHoveringDoor = false;
+
+canvas.addEventListener("mousemove", (e) => {
+    // Lấy tọa độ chuột tương đối với canvas
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // Định nghĩa vùng trigger (từ thông số bạn đưa ra)
+    const doorX1 = W * 0.4;
+    const doorY1 = H * 0.25;
+    const doorX2 = W * 0.6;
+    const doorY2 = H * 0.9;
+
+    // Kiểm tra va chạm (Hit Detection)
+    if (mouseX >= doorX1 && mouseX <= doorX2 && 
+        mouseY >= doorY1 && mouseY <= doorY2) {
+        isHoveringDoor = true;
+        canvas.style.cursor = "pointer"; // Đổi con trỏ chuột cho giống link
+    } else {
+        isHoveringDoor = false;
+        canvas.style.cursor = "default";
+    }
+});
+
 // t chạy từ 0 đến 1, hàm trả về giá trị đã được "uốn cong"
 function easeInOutQuad(t) {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
@@ -145,6 +170,18 @@ function draw() {
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
 
 function drawDoor() {
+// Thiết lập style dựa trên trạng thái hover
+    if (isHoveringDoor && doorIndex >= doorPath.length) { 
+        // Chỉ sáng lên khi đã vẽ xong hoàn toàn
+        ctx.strokeStyle = "#555"; // Màu xám đậm hoặc màu xanh nhạt tùy bạn
+        ctx.shadowBlur = 15;      // Độ tỏa sáng
+        ctx.shadowColor = "rgba(0, 0, 0, 0.3)"; 
+        ctx.lineWidth = 3;        // Nét dày hơn một chút
+    } else {
+        ctx.strokeStyle = "black";
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = 2;
+    }
     // 1. Vẽ lại các nét đã xong để duy trì hình ảnh
     for (let i = 0; i < doorIndex; i++) {
         const s = doorPath[i];
