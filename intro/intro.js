@@ -13,7 +13,6 @@ canvas.addEventListener("mousemove", (e) => {
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
 
-    // Cập nhật biến trạng thái bằng hàm chuyên biệt
     isHoveringDoor = isMouseOverDoor(mx, my, W, H);
     
     if (state === "IDLE") {
@@ -27,12 +26,11 @@ let groupIndex = 0
 let doorIndex = 0
 let doorProgress = 0
 
-// t chạy từ 0 đến 1, hàm trả về giá trị đã được "uốn cong"
 function easeInOutQuad(t) {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
 
-// chia line thành từng nhóm
+
 const lineGroups = [
 
 [
@@ -117,7 +115,6 @@ function draw() {
     ctx.strokeStyle = "black";
     ctx.lineCap = "round";
 
-    // --- VẼ TƯỜNG (Nhiều nét cùng lúc từ tâm) ---
     for (let g = 0; g <= groupIndex && g < lineGroups.length; g++) {
         for (let line of lineGroups[g]) {
             const [x1, y1, x2, y2] = line;
@@ -128,7 +125,6 @@ function draw() {
 
             ctx.beginPath();
             if (g < groupIndex) {
-                // Nhóm tường đã vẽ xong: Giữ nguyên trên màn hình
                 ctx.moveTo(x1, y1);
                 ctx.lineTo(x2, y2);
             } else if (g === groupIndex) {
@@ -140,7 +136,6 @@ function draw() {
         }
     }
 
-    // --- CẬP NHẬT TIẾN ĐỘ TƯỜNG ---
     if (groupIndex < lineGroups.length) {
         progress += 0.01;
         if (progress >= 1) {
@@ -148,7 +143,6 @@ function draw() {
             groupIndex++;
         }
     } 
-    // --- VẼ CỬA (Chỉ bắt đầu khi tường xong) ---
     else {
         drawDoor();
     }
@@ -159,24 +153,10 @@ function draw() {
         drawDoorGlow(ctx, W, H);
     }
 
-    requestAnimationFrame(draw);
 }
-  // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
+
 
 function drawDoor() {
-// Thiết lập style dựa trên trạng thái hover
-    if (isHoveringDoor && doorIndex >= doorPath.length) { 
-        // Chỉ sáng lên khi đã vẽ xong hoàn toàn
-        ctx.strokeStyle = "#555"; // Màu xám đậm hoặc màu xanh nhạt tùy bạn
-        ctx.shadowBlur = 15;      // Độ tỏa sáng
-        ctx.shadowColor = "rgba(0, 0, 0, 0.3)"; 
-        ctx.lineWidth = 3;        // Nét dày hơn một chút
-    } else {
-        ctx.strokeStyle = "black";
-        ctx.shadowBlur = 0;
-        ctx.lineWidth = 2;
-    }
-    // 1. Vẽ lại các nét đã xong để duy trì hình ảnh
     for (let i = 0; i < doorIndex; i++) {
         const s = doorPath[i];
         if (s[4]) { 
@@ -186,8 +166,6 @@ function drawDoor() {
             ctx.stroke();
         }
     }
-
-    // 2. Xử lý nét đang vẽ hoặc đang di chuyển
     if (doorIndex < doorPath.length) {
         const s = doorPath[doorIndex];
         const x1 = s[0], y1 = s[1], x2 = s[2], y2 = s[3];
@@ -197,21 +175,19 @@ function drawDoor() {
         const dy = y2 - y1;
         const distance = Math.sqrt(dx * dx + dy * dy) || 1;
 
-        // --- THÔNG SỐ TỐC ĐỘ TRUNG BÌNH ---
-        const baseSpeed = 3;           // 6 pixel mỗi khung hình (Mức trung bình)
-        const moveMultiplier = 2.0;    // Di chuyển nhanh gấp đôi khi nhấc bút
+        const baseSpeed = 3;          
+        const moveMultiplier = 2.0;    
         
         const currentSpeed = penDown ? baseSpeed : (baseSpeed * moveMultiplier);
         doorProgress += currentSpeed / distance;
 
-        // Giới hạn progress ở mức 1
         const p = Math.min(doorProgress, 1);
         const easedT = easeInOutQuad(p);
 
         const curX = x1 + dx * easedT;
         const curY = y1 + dy * easedT;
 
-        // Vẽ nét vẽ (nếu đang đè bút)
+
         if (penDown) {
             ctx.beginPath();
             ctx.moveTo(x1, y1);
@@ -219,7 +195,6 @@ function drawDoor() {
             ctx.stroke();
         }
 
-        // Luôn vẽ chấm tròn (đầu bút)
         ctx.beginPath();
         ctx.fillStyle = "black";
         ctx.arc(curX, curY, 4, 0, Math.PI * 2);
@@ -230,7 +205,6 @@ function drawDoor() {
             doorIndex++;
         }
     } else {
-        // Giữ bút đứng yên tại điểm cuối cùng
         const last = doorPath[doorPath.length - 1];
         ctx.beginPath();
         ctx.arc(last[2], last[3], 4, 0, Math.PI * 2);
