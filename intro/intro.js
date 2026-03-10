@@ -167,7 +167,7 @@ function drawDoor() {
         const distance = Math.sqrt(dx * dx + dy * dy) || 1;
 
         // --- THÔNG SỐ TỐC ĐỘ TRUNG BÌNH ---
-        const baseSpeed = 6;           // 6 pixel mỗi khung hình (Mức trung bình)
+        const baseSpeed = 3;           // 6 pixel mỗi khung hình (Mức trung bình)
         const moveMultiplier = 2.0;    // Di chuyển nhanh gấp đôi khi nhấc bút
         
         const currentSpeed = penDown ? baseSpeed : (baseSpeed * moveMultiplier);
