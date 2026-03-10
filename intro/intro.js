@@ -1,5 +1,18 @@
 function startIntro(){
 
+canvas.addEventListener("mousemove", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    // Cập nhật biến trạng thái bằng hàm chuyên biệt
+    isHoveringDoor = isMouseOverDoor(mx, my, W, H);
+    
+    if (state === "IDLE") {
+        canvas.style.cursor = isHoveringDoor ? "pointer" : "default";
+    }
+});
+
 const canvas = document.getElementById("intro-canvas")
 const ctx = canvas.getContext("2d")
 
@@ -13,31 +26,6 @@ let progress = 0
 let groupIndex = 0
 let doorIndex = 0
 let doorProgress = 0
-
-let isHoveringDoor = false;
-
-canvas.addEventListener("mousemove", (e) => {
-    // Lấy tọa độ chuột tương đối với canvas
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    // Định nghĩa vùng trigger (từ thông số bạn đưa ra)
-    const doorX1 = W * 0.4;
-    const doorY1 = H * 0.25;
-    const doorX2 = W * 0.6;
-    const doorY2 = H * 0.9;
-
-    // Kiểm tra va chạm (Hit Detection)
-    if (mouseX >= doorX1 && mouseX <= doorX2 && 
-        mouseY >= doorY1 && mouseY <= doorY2) {
-        isHoveringDoor = true;
-        canvas.style.cursor = "pointer"; // Đổi con trỏ chuột cho giống link
-    } else {
-        isHoveringDoor = false;
-        canvas.style.cursor = "default";
-    }
-});
 
 // t chạy từ 0 đến 1, hàm trả về giá trị đã được "uốn cong"
 function easeInOutQuad(t) {
@@ -166,6 +154,12 @@ function draw() {
     }
 
     requestAnimationFrame(draw);
+
+    if (state === "IDLE" && isHoveringDoor) {
+        drawDoorGlow(ctx, W, H);
+    }
+
+    requestAnimationFrame(draw);
 }
   // vtvytbtfrtdtyrvytfrcvrtdtryft byubtyv6rtvrtvtuygbyutgrdedxe vtyvytvyubuybvr6dw4swrxrtcgyv 
 
@@ -242,6 +236,35 @@ function drawDoor() {
         ctx.arc(last[2], last[3], 4, 0, Math.PI * 2);
         ctx.fill();
     }
+}
+
+function isMouseOverDoor(mx, my, W, H) {
+    const x1 = W * 0.4;
+    const y1 = H * 0.25;
+    const x2 = W * 0.6;
+    const y2 = H * 0.9;
+    return mx >= x1 && mx <= x2 && my >= y1 && my <= y2;
+}
+
+function drawDoorGlow(ctx, W, H) {
+    ctx.save();
+    
+    // Tọa độ vùng chữ nhật cửa
+    const x = W * 0.4;
+    const y = H * 0.25;
+    const w = W * 0.2; // (0.6 - 0.4) * W
+    const h = H * 0.65; // (0.9 - 0.25) * H
+
+    // Thiết lập phong cách "Sáng viền"
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.5)"; // Màu viền xám đậm hoặc màu bạn thích
+    ctx.lineWidth = 3;
+    ctx.shadowBlur = 15;                   // Độ tỏa sáng
+    ctx.shadowColor = "rgba(0, 0, 0, 0.4)"; // Màu của ánh sáng phát ra
+    
+    // Chỉ vẽ cái khung hình chữ nhật bao quanh
+    ctx.strokeRect(x, y, w, h);
+    
+    ctx.restore();
 }
 
 draw()
