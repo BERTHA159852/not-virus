@@ -87,7 +87,16 @@ body {
     pointer-events: auto !important;
     transform: translateY(0) !important;
 }
+.error-shake {
+    animation: shake 0.3s ease-in-out;
+    border-bottom: 2px solid red !important;
+}
 
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
 #start-screen {
   user-select: none;
   -webkit-user-select: none; /* Chrome, Safari */
