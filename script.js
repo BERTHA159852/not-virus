@@ -41,7 +41,7 @@ confirmBtn.addEventListener('click', () => {
         
         setTimeout(() => {
             accessInput.classList.remove('error-shake');
-            accessInput.placeholder = "ENTER ACCESS CODE...";
+            accessInput.placeholder = "ENTER ACCESS CODE TO CHANGE";
         }, 500);
     }
 });
