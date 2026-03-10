@@ -1,4 +1,12 @@
 function startIntro(){
+const canvas = document.getElementById("intro-canvas")
+const ctx = canvas.getContext("2d")
+
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+
+const H = canvas.height
+const W = canvas.width
 
 canvas.addEventListener("mousemove", (e) => {
     const rect = canvas.getBoundingClientRect();
@@ -13,14 +21,6 @@ canvas.addEventListener("mousemove", (e) => {
     }
 });
 
-const canvas = document.getElementById("intro-canvas")
-const ctx = canvas.getContext("2d")
-
-canvas.width = window.innerWidth
-canvas.height = window.innerHeight
-
-const H = canvas.height
-const W = canvas.width
 
 let progress = 0
 let groupIndex = 0
