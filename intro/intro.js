@@ -25,7 +25,8 @@ let progress = 0
 let groupIndex = 0
 let doorIndex = 0
 let doorProgress = 0
-
+let state = "DRAWING";
+    
 function easeInOutQuad(t) {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
