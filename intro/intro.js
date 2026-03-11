@@ -176,10 +176,10 @@ function draw() {
 
     function drawDoorGlow(ctx, W, H) {
         ctx.save();
-        const x = W * 0.4;
-        const y = H * 0.25;
-        const w = W * 0.2;
-        const h = H * 0.65;
+        const x = W*0.4+H*0.04;
+        const y = H * 0.29;
+        const w = W * 0.2-H*0.08;
+        const h = H * 0.61;
 
         ctx.strokeStyle = "rgba(0, 0, 0, 0.4)"; 
         ctx.lineWidth = 3;
