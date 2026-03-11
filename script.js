@@ -12,7 +12,7 @@ langBtn.addEventListener('click', () => {
     if (isStarting) return;
     if (selectedRoute === 'vi') {
         codeWrapper.classList.add('show'); 
-        accessInput.focus(); // Tự động đưa con trỏ vào ô nhập
+        accessInput.focus();
     } else {
         selectedRoute = 'vi';
         updateContent('vi');
@@ -21,7 +21,7 @@ langBtn.addEventListener('click', () => {
 });
 
 confirmBtn.addEventListener('click', () => {
-    const secretCode = "xxLyraxx"; // Mã bạn giấu ở món quà ngoài đời
+    const secretCode = "xxLyraxx"; 
     const userValue = accessInput.value.trim().toUpperCase();
 
     if (userValue === secretCode) {
