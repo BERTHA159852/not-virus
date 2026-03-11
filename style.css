@@ -5,6 +5,9 @@ body {
   background: white;
 }
 
+.lang-btn {
+text-align:center;}
+
 #start-screen {
   height: 100vh;
   display: flex;
