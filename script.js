@@ -23,7 +23,13 @@ langBtn.addEventListener('click', () => {
 confirmBtn.addEventListener('click', () => {
     const secretCode = "xxLyraxx"; 
     const userValue = accessInput.value.trim();
-
+    
+    accessInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        confirmBtn.click();
+    }
+});
+    
     if (userValue === secretCode) {
         // GIẢI MÃ THÀNH CÔNG
         selectedRoute = 'en';
