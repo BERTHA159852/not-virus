@@ -55,11 +55,11 @@ confirmBtn.addEventListener('click', () => {
 function updateContent(lang) {
     if (lang === 'vi') {
         startBtn.textContent = 'BẮT ĐẦU';
-        langBtn.textContent = 'VI';
+        langBtn.textContent = 'Ngôn ngữ: VI';
         f11Hint.textContent = 'Nhấn F11 để có trải nghiệm tốt hơn';
     } else {
         startBtn.textContent = 'START';
-        langBtn.textContent = 'EN';
+        langBtn.textContent = 'Language: EN';
         f11Hint.textContent = 'Press F11 for better experience';
     }
 }
