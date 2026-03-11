@@ -5,8 +5,13 @@ body {
   background: white;
 }
 
-.lang-btn {
-align-items:center;}
+.lang-section {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;   
+    justify-content: center;
+    width: 100%;           
+}
 
 #start-screen {
   height: 100vh;
