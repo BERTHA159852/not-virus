@@ -21,7 +21,7 @@ langBtn.addEventListener('click', () => {
 });
 
 confirmBtn.addEventListener('click', () => {
-    const secretCode = "BIRTHDAY2026"; // Mã bạn giấu ở món quà ngoài đời
+    const secretCode = "xxLyraxx"; // Mã bạn giấu ở món quà ngoài đời
     const userValue = accessInput.value.trim().toUpperCase();
 
     if (userValue === secretCode) {
@@ -41,7 +41,7 @@ confirmBtn.addEventListener('click', () => {
         
         setTimeout(() => {
             accessInput.classList.remove('error-shake');
-            accessInput.placeholder = "ENTER ACCESS CODE TO CHANGE";
+            accessInput.placeholder = "ENTER CODE TO CHANGE";
         }, 500);
     }
 });
