@@ -19,16 +19,14 @@ langBtn.addEventListener('click', () => {
         codeWrapper.classList.remove('show');
     }
 });
-
-confirmBtn.addEventListener('click', () => {
-    const secretCode = "xxLyraxx"; 
-    const userValue = accessInput.value.trim();
-    
-    accessInput.addEventListener('keypress', (e) => {
+ accessInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         confirmBtn.click();
     }
 });
+confirmBtn.addEventListener('click', () => {
+    const secretCode = "xxLyraxx"; 
+    const userValue = accessInput.value.trim();
     
     if (userValue === secretCode) {
         // GIẢI MÃ THÀNH CÔNG
