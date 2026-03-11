@@ -22,7 +22,7 @@ langBtn.addEventListener('click', () => {
 
 confirmBtn.addEventListener('click', () => {
     const secretCode = "xxLyraxx"; 
-    const userValue = accessInput.value.trim().toUpperCase();
+    const userValue = accessInput.value.trim();
 
     if (userValue === secretCode) {
         // GIẢI MÃ THÀNH CÔNG
