@@ -63,14 +63,13 @@ startBtn.addEventListener('click', () => {
   if (isStarting) return;
   isStarting = true;
   codeWrapper.classList.remove('show');
-f11-hint.classList.add('hide');
+    f11Hint.classList.add('hide');
   
   localStorage.setItem('storyRoute', selectedRoute);
   startBtn.classList.add('fly-up');
 
   setTimeout(() => {
     langBtn.classList.add('fly-up');
-    f11Hint.classList.add('hide');
   }, 400);
 
   setTimeout(() => {
