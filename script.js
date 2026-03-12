@@ -29,16 +29,13 @@ confirmBtn.addEventListener('click', () => {
     const userValue = accessInput.value.trim();
     
     if (userValue === secretCode) {
-        // GIẢI MÃ THÀNH CÔNG
         selectedRoute = 'en';
         updateContent('en');
         codeWrapper.classList.remove('show'); // Ẩn ô nhập đi
         
-        // Hiệu ứng thông báo nhỏ cho ngầu
         langBtn.style.color = "#2ecc71"; // Đổi màu xanh lá báo thành công
-        setTimeout(() => { langBtn.style.color = "black"; }, 2000);
+        setTimeout(() => { langBtn.style.color = "black"; }, 500);
     } else {
-        // SAI MÃ: Tạo hiệu ứng rung (Shake) báo lỗi
         accessInput.classList.add('error-shake');
         accessInput.value = "";
         accessInput.placeholder = "WRONG CODE";
@@ -65,6 +62,7 @@ function updateContent(lang) {
 startBtn.addEventListener('click', () => {
   if (isStarting) return;
   isStarting = true;
+  codeWrapper.classList.remove('show');
   
   localStorage.setItem('storyRoute', selectedRoute);
   startBtn.classList.add('fly-up');
