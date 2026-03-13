@@ -1,6 +1,7 @@
 let selectedRoute = 'vi';
 let isStarting = false;
 let flag01 = 0;
+let flag02 = 0;
 
 const startBtn = document.getElementById('start-btn');
 const langBtn = document.getElementById('lang-btn');
@@ -11,14 +12,17 @@ const confirmBtn = document.getElementById('confirm-code');
 
 langBtn.addEventListener('click', () => {
     if (isStarting) return;
-    if (selectedRoute === 'vi' && flag01 === 0) {
+    if (selectedRoute === 'vi' && flag01 === 0 && flag02 === 0) {
         flag01 = 1;
         codeWrapper.classList.add('show'); 
         accessInput.focus();
-    } else if (selectedRoute === 'vi' &&  === 1)
+    } else if (selectedRoute === 'vi' &&  flag01 === 1)
     {
         flag01 = 0;
         codeWrapper.classList.remove('show');
+    } else if (selectedRoute === 'vi' && flag01 === 0 && flag02 === 1){
+        selectedRoute = 'en';
+        updateContent('en');
     } else if (selectedRoute === 'en'){        
         selectedRoute = 'vi';
         updateContent('vi');
@@ -37,9 +41,10 @@ confirmBtn.addEventListener('click', () => {
     if (userValue === secretCode) {
         selectedRoute = 'en';
         updateContent('en');
-        codeWrapper.classList.remove('show'); // Ẩn ô nhập đi
+        codeWrapper.classList.remove('show');
+        flag02 = 1;
         
-        langBtn.style.color = "#2ecc71"; // Đổi màu xanh lá báo thành công
+        langBtn.style.color = "#2ecc71";
         setTimeout(() => { langBtn.style.color = "black"; }, 500);
     } else {
         accessInput.classList.add('error-shake');
