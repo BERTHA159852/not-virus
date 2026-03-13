@@ -1,5 +1,6 @@
 let selectedRoute = 'vi';
 let isStarting = false;
+let flag01 = 0;
 
 const startBtn = document.getElementById('start-btn');
 const langBtn = document.getElementById('lang-btn');
@@ -10,10 +11,15 @@ const confirmBtn = document.getElementById('confirm-code');
 
 langBtn.addEventListener('click', () => {
     if (isStarting) return;
-    if (selectedRoute === 'vi') {
+    if (selectedRoute === 'vi' && flag01 === 0) {
+        flag01 = 1;
         codeWrapper.classList.add('show'); 
         accessInput.focus();
-    } else {
+    } else if (selectedRoute === 'vi' &&  === 1)
+    {
+        flag01 = 0;
+        codeWrapper.classList.remove('show');
+    } else if (selectedRoute === 'en'){        
         selectedRoute = 'vi';
         updateContent('vi');
         codeWrapper.classList.remove('show');
