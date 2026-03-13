@@ -45,7 +45,7 @@ confirmBtn.addEventListener('click', () => {
         flag02 = 1;
         
         langBtn.style.color = "#2ecc71";
-        setTimeout(() => { langBtn.style.color = "black"; }, 500);
+        setTimeout(() => { langBtn.style.color = "black"; }, 5);
     } else {
         accessInput.classList.add('error-shake');
         accessInput.value = "";
