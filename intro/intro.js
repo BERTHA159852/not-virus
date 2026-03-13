@@ -8,7 +8,6 @@ function startIntro() {
     const H = canvas.height;
     const W = canvas.width;
 
-    // Khai báo biến trạng thái
     let isHoveringDoor = false; 
     let state = "DRAWING";
     let progress = 0;
@@ -28,7 +27,6 @@ function startIntro() {
         }
     });
 
-    // Hàm bổ trợ giữ nguyên
     function easeInOutQuad(t) {
         return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
     }
@@ -119,7 +117,6 @@ function draw() {
         ctx.lineCap = "round";
         ctx.shadowBlur = 0; // Reset shadow mỗi khung hình
 
-        // 1. Vẽ tường
         for (let g = 0; g <= groupIndex && g < lineGroups.length; g++) {
             for (let line of lineGroups[g]) {
                 const [x1, y1, x2, y2] = line;
@@ -140,7 +137,6 @@ function draw() {
             }
         }
 
-        // 2. Cập nhật tiến trình vẽ tường hoặc vẽ cửa
         if (groupIndex < lineGroups.length) {
             progress += 0.01;
             if (progress >= 1) {
@@ -148,24 +144,21 @@ function draw() {
                 groupIndex++;
             }
         } else {
-            drawDoor(); // Vẽ cánh cửa
+            drawDoor();
             
-            // Nếu đã vẽ xong cửa thì chuyển sang trạng thái IDLE
             if (doorIndex >= doorPath.length) {
                 state = "IDLE";
             }
         }
 
-        // 3. CHỈ VẼ VIỀN SÁNG KHI ĐANG HOVER VÀ ĐÃ VẼ XONG
         if (state === "IDLE" && isHoveringDoor) {
             drawDoorGlow(ctx, W, H);
         }
 
-        // CHỈ GỌI 1 LẦN DUY NHẤT Ở ĐÂY
         requestAnimationFrame(draw);
     }
 
-    // Các hàm phụ trợ tách biệt
+
     function isMouseOverDoor(mx, my, W, H) {
         const x1 = W * 0.4;
         const y1 = H * 0.25;
@@ -186,12 +179,11 @@ function draw() {
         ctx.shadowBlur = 15;                   
         ctx.shadowColor = "rgba(0, 0, 0, 0.3)"; 
         
-        ctx.strokeRect(x, y, w, h); // Chỉ vẽ khung hình chữ nhật
+        ctx.strokeRect(x, y, w, h);
         ctx.restore();
     }
 
     function drawDoor() {
-        // Đảm bảo nét vẽ cửa luôn đen, không bị dính shadow
         ctx.strokeStyle = "black";
         ctx.shadowBlur = 0;
 
@@ -242,5 +234,5 @@ function draw() {
         }
     }
 
-    draw(); // Khởi chạy vòng lặp
+    draw();
 }
