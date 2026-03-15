@@ -202,7 +202,7 @@ function draw() {
             const dx = s[2] - s[0];
             const dy = s[3] - s[1];
             const distance = Math.sqrt(dx * dx + dy * dy) || 1;
-            const currentSpeed = s[4] ? 3 : 6;
+            const currentSpeed = s[4] ? 6 : 12;
 
             doorProgress += currentSpeed / distance;
             const p = Math.min(doorProgress, 1);
